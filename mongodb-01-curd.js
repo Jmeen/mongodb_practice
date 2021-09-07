@@ -142,9 +142,43 @@ function testInsertManyDocs(docs) {
   }
 }
 
-testInsertManyDocs([
-  { name: "서태웅", position: "forward", num: 11 },
-  { name: "강백호", position: "Power forward", num: 10 },
-  { name: "송태섭", position: "Point Guard", num: 23 },
-  { name: "정대만", position: "guard", num: 9 },
-]);
+// testInsertManyDocs([
+//   { name: "서태웅", position: "forward", num: 11 },
+//   { name: "강백호", position: "Power forward", num: 10 },
+//   { name: "송태섭", position: "Point Guard", num: 23 },
+//   { name: "정대만", position: "guard", num: 9 },
+// ]);
+
+// 함수 내보내기 : 다른 모듈에서 사용할 수 있게
+exports.testInsertOneDoc = testInsertOneDoc;
+exports.testInsertManyDocs = testInsertManyDocs;
+exports.testDeleteAll = testDeleteAll;
+
+function testUpdateByJob(name, job) {
+  // name이 일치하는 문서의 job field를 업데이트 하자.
+  client.connect().then((clinet) => {
+    const db = client.db("mydb");
+    db.collection("friends")
+      .updateMany(
+        { name: name }, // 조건객체
+        {
+          $set: { job: job },
+        }
+      )
+      .then((result) => {
+        console.log(
+          result.modifiedCount,
+          "개 업데이트",
+          result.upsertedCount,
+          "개 업서트"
+        );
+
+        client.close();
+      })
+
+      .catch((reason) => {
+        console.error(reason);
+      });
+  });
+}
+testUpdateByJob("정대만", "고3");
