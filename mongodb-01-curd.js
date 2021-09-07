@@ -88,3 +88,63 @@ function testInsertMany(names) {
 
 // testInsertMany(["서태웅", "송태섭", "채치수", "정대만"]);
 // testInsertMany("장길산")
+
+// 삭제 :
+// delete form friends [where...]
+// db.friend.delete, db.friend.deleteMany({조건객체})
+function testDeleteAll() {
+  client.connect().then((client) => {
+    const db = client.db("mydb");
+    db.collection("friends")
+      .deleteMany({}) // 조건객체
+      .then((result) => {
+        console.log(result.deletedCount, "개 레코드 삭제");
+        client.close();
+      });
+  });
+}
+
+// testDeleteAll();
+
+function testInsertOneDoc(doc) {
+  client.connect().then((client) => {
+    const db = client.db("mydb");
+    db.collection("friends")
+      .insertOne(doc)
+      .then((result) => {
+        console.log(result.insertedCount, "개 등록 완료");
+        client.close();
+      })
+      .catch((reason) => {
+        console.error(reson);
+      });
+  });
+}
+// testInsertOneDoc({ name: "채치수", position: "center" });
+
+function testInsertManyDocs(docs) {
+  console.log(docs, "is array?", Array.isArray(docs));
+
+  if (Array.isArray(docs)) {
+    client.connect().then((client) => {
+      const db = client.db("mydb");
+      db.collection("friends")
+        .insertMany(docs)
+        .then((result) => {
+          console.log(result.insertedCOunt, "개 등록 완료");
+          client.close();
+        })
+        .catch((reson) => {
+          console.error(reson);
+          client.close();
+        });
+    });
+  }
+}
+
+testInsertManyDocs([
+  { name: "서태웅", position: "forward", num: 11 },
+  { name: "강백호", position: "Power forward", num: 10 },
+  { name: "송태섭", position: "Point Guard", num: 23 },
+  { name: "정대만", position: "guard", num: 9 },
+]);
