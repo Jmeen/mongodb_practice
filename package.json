@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Jmeen/mongodb_practice#readme",
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "logger": "0.0.1",
     "mongodb": "^4.1.1",
