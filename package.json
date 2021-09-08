@@ -1,0 +1,27 @@
+{
+  "name": "mongodb_practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jmeen/mongodb_practice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jmeen/mongodb_practice/issues"
+  },
+  "homepage": "https://github.com/Jmeen/mongodb_practice#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "logger": "0.0.1",
+    "mongodb": "^4.1.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.12"
+  }
+}
