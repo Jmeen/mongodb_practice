@@ -12,7 +12,14 @@
 
   <title>Friend List</title>
   <script>
-      // TODO: 스크립트 추가
+      function confirm_delete(oid) {
+        // alert("삭제할 id:" + oid);
+        let choice = confirm("삭제하시겠습니까?");
+        if (choice) {
+          //  주소를 삭제 처리 URL로 변경
+          document.location.href = "/web/friends/delete/"+oid;
+        }
+      }
   </script>
 </head>
 
@@ -43,9 +50,7 @@
             <th scope="row">
               <%= index +1 %>
             </th>
-            <td><a href="#">
-                <%= friend.name %>
-              </a></td>
+            <td><a href="/web/friends/show/<%= friend._id %>"><%= friend.name %></a></td>
             <td>
               <%= friend.position %>
             </td>
@@ -53,7 +58,7 @@
               <%= friend.num %>
             </td>
             <td><a href="#" class="btn btn-primary btn-sm">수정</a>
-              <button onclick="#" class="btn btn-danger btn-sm">삭제</button>
+              <button onclick='confirm_delete("<%= friend._id %>")' class="btn btn-danger btn-sm">삭제</button>
             </td>
           </tr>
 
