@@ -20,6 +20,10 @@
           document.location.href = "/web/friends/delete/"+oid;
         }
       }
+
+
+
+
   </script>
 </head>
 
@@ -57,8 +61,9 @@
             <td>
               <%= friend.num %>
             </td>
-            <td><a href="#" class="btn btn-primary btn-sm">수정</a>
+            <td><a href="/web/friends/modify/<%= friend._id %>" class="btn btn-primary btn-sm">수정</a>
               <button onclick='confirm_delete("<%= friend._id %>")' class="btn btn-danger btn-sm">삭제</button>
+              <a href="/api/friends/<%= friend._id %>.json" class="btn btn-warning btn-sm">json</a>
             </td>
           </tr>
 

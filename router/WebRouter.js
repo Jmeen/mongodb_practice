@@ -4,6 +4,7 @@ const router = express.Router();
 const { ObjectId } = require("mongodb"); // ObjectId를 처리하기 위한 객체
 const { restart } = require("nodemon");
 
+
 module.exports = (app) => {
   router.get(["/friends/list", "/friends"], (req, resp) => {
     // express에서 DB객체 꺼내고 query 수행
@@ -55,19 +56,19 @@ module.exports = (app) => {
 
   })
 
-    //  사용자 정보 확인
-    router.get("/friends/show/:id", (req, resp) => {
-      console.log("id:", req.params.id);
+  //  사용자 정보 확인
+  router.get("/friends/show/:id", (req, resp) => {
+    console.log("id:", req.params.id);
 
-      let db = app.get("db");
-      db.collection('friends')
-      .findOne({_id: ObjectId(req.params.id)})
+    let db = app.get("db");
+    db.collection('friends')
+      .findOne({ _id: ObjectId(req.params.id) })
       .then(result => {
-          resp.render("friends_show", { friend: result });
+        resp.render("friends_show", { friend: result });
       })
       .catch(reason => {
-          resp.status(500)
-              .send("<p>사용자 정보가 없습니다</p>");
+        resp.status(500)
+          .send("<p>사용자 정보가 없습니다</p>");
       })
   });
 
@@ -86,6 +87,60 @@ module.exports = (app) => {
           .send("<p>삭제할 수 없습니다.</p>");
       })
   })
+
+
+  // 수정 폼으로 이동
+  // id 정보를 가지고 수정
+  // /friends/modify (get)
+
+  router.get("/friends/modify/:id", (req, resp) => {
+    console.log("id:", req.params.id);
+
+    let db = app.get("db");
+    db.collection('friends')
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then(result => {
+        resp.render("friend_modify_form", { friend: result });
+      })
+      .catch(reason => {
+        resp.status(500)
+          .send("<p>사용자 정보가 없습니다</p>");
+      })
+  });
+
+  // 수정
+  router.post("/friends/update/:id", (req, resp) => {
+    let db = app.get('db');
+    let document = req.body;
+
+    db.collection("friends")
+      .updateOne(
+        { _id: ObjectId(req.params.id) }, // 조건객체
+        {
+          $set: {
+            name: req.body.name,
+            position: req.body.position,
+            num: req.body.num
+          }
+        }
+      )
+      .then(result => {
+        console.log(result);
+
+        resp
+        .status(200)
+        .redirect("/web/friends");
+      })
+      .catch(reason=>{
+        console.error(reason)
+      })
+  })
+
+
+  // /friends/update (post)
+
+
+  //friends API에서 1명의 정보를 보내주는 API 구현하기
 
 
   return router;
