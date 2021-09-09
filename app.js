@@ -24,6 +24,10 @@ const logger = require("morgan"); // 로거 불러오기
 // 로거 express에 추가 : 미들웨어 추가
 app.use(logger('dev'));
 
+//MongoDB 불러오기
+const { MongoClient } = require("mongodb");
+
+
 // 정적 웹의 제공
 // 미들웨어 express.static 미들웨어 함수를 등록
 app.use(express.static(__dirname + "/public"))
@@ -37,8 +41,8 @@ app.set("views", __dirname + "/views");
 // app.get(url, callback함수)
 app.get("/", (req, resp) => {
   resp.status(200)
-  .contentType("text/html;charset=utf-8")
-  .render('home');
+    .contentType("text/html;charset=utf-8")
+    .render('home');
   // console.log("[GET] / ");
   // resp.writeHead(200, { 'content-type': 'text/html;charset=UTF-8' });
   // resp.write("Express Welcomes you!");
@@ -105,9 +109,34 @@ app.get("/render", (req, resp) => {
   resp.contentType("text/html;charset=utf-8")
     .render("render");
 })
-// 서버 스타트
-http.createServer(app).listen(app.get('port'), () => {
-  console.log("test")
-  console.log('Web Server is running');
-});
 
+// 스타트 서버 함수
+function startServer() {
+  //db 연결 정보
+  const dburl = "mongodb://127.0.0.1:27017";
+  //db 연결
+  MongoClient.connect(dburl, { useNewUrlParser: true })
+    .then(client => {
+      //db 선택
+      console.log("database에 연결되었습니다.");
+      let db = client.db('mydb');
+      // express에 추가
+      app.set("db", db); // db키로 mongodbclinet 추가
+      //espress 실행
+      startExpress();
+    })
+    .catch(reason => {
+      console.log(reason)
+    })
+}
+
+
+// 서버 스타트
+function startExpress() {
+  http.createServer(app).listen(app.get('port'), () => {
+    console.log("test")
+    console.log('Web Server is running');
+  })
+};
+
+startServer();
