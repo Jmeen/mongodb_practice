@@ -1,6 +1,6 @@
 'use strict'
 const { resolvePtr } = require("dns");
-const { response } = require("express");
+const { response, application } = require("express");
 // express 모듈 불러오기
 const express = require("express");
 
@@ -119,6 +119,8 @@ app.get("/render", (req, resp) => {
 const webRouter = require("./router/WebRouter")(app);
 app.use("/web", webRouter);
 
+const APIRouter = require("./router/APIRouter")(app);
+app.use("/api", APIRouter);
 
 
 
